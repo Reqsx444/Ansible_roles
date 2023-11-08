@@ -1,0 +1,30 @@
+---
+- name: Install Certbot
+  apt:
+    name:
+      - certbot
+
+- name: Stop service Apache2, if started
+  ansible.builtin.service:
+    name: apache2
+    state: stopped
+
+- name: Generate SSL Certificate
+  shell: certbot certonly --standalone --non-interactive --agree-tos --register-unsafely-without-email -d {{ ansible_facts['fqdn'] }}
+
+- name: Start service Apache2, if stopped
+  ansible.builtin.service:
+    name: apache2
+    state: started
+
+- name: Transfer certificate
+  shell: cp /etc/letsencrypt/live/{{ ansible_facts['fqdn'] }}/fullchain.pem /etc/ssl/certs/ssl-cert-snakeoil.pem
+
+- name: Transfer key
+  shell: cp /etc/letsencrypt/live/{{ ansible_facts['fqdn'] }}/privkey.pem /etc/ssl/private/ssl-cert-snakeoil.key
+
+- name: Enable SSL site
+  shell: a2ensite default-ssl.conf
+
+- name: Reload Apache2
+  shell: systemctl reload apache2
