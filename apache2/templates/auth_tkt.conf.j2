@@ -1,0 +1,19 @@
+{{ ansible_managed | comment }}
+
+TKTAuthSecret "{{ apache_tkt_auth_secret }}"
+TKTAuthDigestType SHA512
+SetEnv MOD_AUTH_TKT_CONF "/etc/apache2/mods-enabled/auth_tkt.conf"
+
+<Directory />
+  TKTAuthTimeout 86400
+  TKTAuthCookieSecure off
+  TKTAuthRequireSSL off
+  TKTAuthIgnoreIP on
+</Directory>
+<Location />
+  TKTAuthTimeout 86400
+  TKTAuthCookieSecure off
+  TKTAuthRequireSSL off
+  TKTAuthIgnoreIP on
+</Location>
+

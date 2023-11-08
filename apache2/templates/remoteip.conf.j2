@@ -1,0 +1,8 @@
+{{ ansible_managed | comment }}
+
+LoadModule remoteip_module modules/mod_remoteip.so
+
+RemoteIPHeader X-Forwarded-For
+RemoteIPInternalProxy 127.0.0.1
+
+
